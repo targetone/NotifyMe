@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo NotifyMe.js</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs.css">
+    <link rel="stylesheet" href="notifyme.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin-bottom: 10px;
+        }
+
+        .demo-button {
+            margin: 5px 0;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .demo-button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-group {
+            margin-bottom: 30px;
+        }
+
+        pre code {
+            padding: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Demo NotifyMe.js</h1>
+    <p><strong>NotifyMe.js</strong> é uma biblioteca JavaScript simples e leve para exibir mensagens temporárias de notificação de sucesso, erro, aviso ou informações gerais. Abaixo, você encontrará detalhes sobre suas funcionalidades, como usá-la, e exemplos práticos.</p>
+
+    <h2>Funcionalidades</h2>
+    <ul>
+        <li><strong>Tipos de Notificações:</strong> Suporte para mensagens de sucesso, erro, aviso e informação.</li>
+        <li><strong>Personalização:</strong> Ícones, duração, persistência e possibilidade de tornar a notificação dispensável (com botão de fechar).</li>
+        <li><strong>Notificações Temporárias:</strong> As notificações desaparecem automaticamente após um tempo, mas você pode configurá-las como persistentes.</li>
+        <li><strong>Console Logging:</strong> Mensagens podem ser registradas no console para facilitar o debug.</li>
+    </ul>
+
+    <h2>Uso do Font Awesome</h2>
+    <p>A biblioteca <strong>NotifyMe.js</strong> usa <strong>Font Awesome 4.7</strong> por padrão para exibir os ícones nas notificações. Para que os ícones apareçam corretamente, você deve incluir o link para o Font Awesome 4.7 em sua página HTML, conforme mostrado no cabeçalho deste documento:</p>
+    <pre><code class="html">&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"&gt;</code></pre>
+
+    <p>Se preferir usar uma versão diferente do Font Awesome (por exemplo, 5.x) ou até mesmo outra biblioteca de ícones, você pode fazer isso alterando o código JavaScript. No arquivo <code>notifyme.js</code>, localize a função <code>_createAlertElement</code>, onde o ícone é definido:</p>
+    <pre><code class="javascript">const alertHtml = `
+    &lt;div class="alert alert-${this.cssClass} erro-dashboard" style="display: none; z-index: 9999999999;"&gt;
+        &lt;span class="fa fa-${this.icon}"&gt;&lt;/span&gt;
+        ${this.dismissable ? "&lt;button class='close' aria-hidden='true'&gt;×&lt;/button&gt;" : ""}
+        ${this.message}
+    &lt;/div&gt;
+`;</code></pre>
+
+    <p>Nessa linha, o ícone é definido usando a classe <code>fa</code> do Font Awesome 4.7. Para usar outro conjunto de ícones, substitua <code>fa fa-${this.icon}</code> pela classe correspondente do novo conjunto. Por exemplo, se estiver usando o Font Awesome 5.x, você pode alterar para <code>fas fa-${this.icon}</code>. Ou, se estiver usando outra biblioteca, ajuste a classe conforme necessário.</p>
+
+    <h2>Tempo de Exibição das Notificações</h2>
+    <p>Por padrão, a duração de uma notificação é calculada com base no tempo de leitura da mensagem (usando uma média de 230 palavras por minuto), acrescida de 1,5 segundos para garantir que a mensagem seja visualizada. Você pode alterar essa duração manualmente, se necessário.</p>
+
+    <h2>Chamadas Existentes</h2>
+    <ul>
+        <li><strong>messageSuccess:</strong> Exibe uma mensagem de sucesso. Exemplo: <code>messageSuccess('Operação concluída com sucesso!');</code></li>
+        <li><strong>messageError:</strong> Exibe uma mensagem de erro. Exemplo: <code>messageError('Ocorreu um erro durante a operação.');</code></li>
+        <li><strong>messageWarning:</strong> Exibe uma mensagem de aviso. Exemplo: <code>messageWarning('Atenção! Verifique as informações.');</code></li>
+        <li><strong>messageInfo:</strong> Exibe uma mensagem de informação. Exemplo: <code>messageInfo('Informação importante a ser considerada.');</code></li>
+        <li><strong>hidePersistent:</strong> Oculta todas as notificações persistentes. Exemplo: <code>hidePersistent();</code></li>
+    </ul>
+
+    <h2>Parâmetros Personalizáveis</h2>
+    <p>Ao chamar qualquer uma das funções de notificação, você pode passar um objeto de configuração com os seguintes parâmetros:</p>
+    <ul>
+        <li><strong>consoleMessage:</strong> Mensagem a ser exibida no console (padrão: <code>null</code>).</li>
+        <li><strong>persistent:</strong> Define se a notificação será persistente e não desaparecerá automaticamente (padrão: <code>false</code>).</li>
+        <li><strong>dismissable:</strong> Define se a notificação terá um botão de fechar (padrão: <code>true</code>).</li>
+        <li><strong>icon:</strong> Ícone da notificação (padrão: depende do tipo, como <code>check</code> para sucesso).</li>
+        <li><strong>duration:</strong> Duração em milissegundos para notificações temporárias (padrão: baseado no tempo de leitura).</li>
+    </ul>
+
+    <div class="button-group">
+        <h3>Exibir Notificações:</h3>
+        <button class="demo-button" onclick="messageSuccess('Operação realizada com sucesso!')">Sucesso</button>
+        <button class="demo-button" onclick="messageError('Ocorreu um erro durante a operação.')">Erro</button>
+        <button class="demo-button" onclick="messageWarning('Atenção! Verifique as informações.')">Aviso</button>
+        <button class="demo-button" onclick="messageInfo('Informação importante a ser considerada.')">Informação</button>
+        
+        <pre><code class="html">
+&lt;button onclick="messageSuccess('Operação realizada com sucesso!')"&gt;Sucesso&lt;/button&gt;
+&lt;button onclick="messageError('Ocorreu um erro durante a operação.')"&gt;Erro&lt;/button&gt;
+&lt;button onclick="messageWarning('Atenção! Verifique as informações.')"&gt;Aviso&lt;/button&gt;
+&lt;button onclick="messageInfo('Informação importante a ser considerada.')"&gt;Informação&lt;/button&gt;
+        </code></pre>
+    </div>
+
+    <div class="button-group">
+        <h3>Notificações Persistentes:</h3>
+        <button class="demo-button" onclick="messageSuccess('Sucesso persistente!', { persistent: true })">Sucesso Persistente</button>
+        <button class="demo-button" onclick="messageError('Erro persistente!', { persistent: true })">Erro Persistente</button>
+        
+        <pre><code class="html">
+&lt;button onclick="messageSuccess('Sucesso persistente!', { persistent: true })"&gt;Sucesso Persistente&lt;/button&gt;
+&lt;button onclick="messageError('Erro persistente!', { persistent: true })"&gt;Erro Persistente&lt;/button&gt;
+        </code></pre>
+    </div>
+
+    <div class="button-group">
+        <h3>Ocultar Notificações Persistentes:</h3>
+        <button class="demo-button" onclick="hidePersistent()">Ocultar Persistentes</button>
+        
+        <pre><code class="html">
+&lt;button onclick="hidePersistent()"&gt;Ocultar Persistentes&lt;/button&gt;
+        </code></pre>
+    </div>
+
+    <p>O CSS básico para as notificações pode ser personalizado diretamente no arquivo <code>notifyme.css</code>:</p>
+    <pre><code class="css">.alert {
+    /* Personalize o estilo das notificações aqui */
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.alert-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.alert-info {
+    background-color: #17a2b8;
+    color: white;
+}</code></pre>
+
+    <script src="notifyme.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>
