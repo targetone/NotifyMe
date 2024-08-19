@@ -68,7 +68,7 @@ class AlertNotification {
         this.box.prepend(alertContainer);
 
         const alertHtml = `
-            <div class="alert alert-${this.cssClass} erro-dashboard" style="display: none; z-index: 9999999999;">
+            <div class="alert alert-${this.cssClass} erro-dashboard fade-in" style="z-index: 9999999999;">
                 <span class="fa fa-${this.icon}"></span>
                 ${this.dismissable ? "<button class='close' aria-hidden='true'>×</button>" : ""}
                 ${this.message}
@@ -83,8 +83,7 @@ class AlertNotification {
         const closeButton = alertElem.querySelector('.close');
         if (closeButton) {
             closeButton.addEventListener('click', () => {
-                alertElem.style.display = 'none';
-                alertElem.parentElement.remove();
+                this._fadeOutAndRemove(alertElem);
             });
         } else {
             console.warn("Close button not found for dismissable alert.");
@@ -94,16 +93,29 @@ class AlertNotification {
     _removeOtherAlerts() {
         const otherAlerts = document.querySelectorAll(`.persistent:not(#${this.name})[id*='alert-helper'] .alert`);
         otherAlerts.forEach(alert => {
-            alert.style.display = 'none';
-            alert.parentElement.remove();
+            this._fadeOutAndRemove(alert);
         });
     }
+
+    _fadeOutAndRemove(alertElem) {
+        if (window.getComputedStyle(alertElem).opacity === "0") {
+            alertElem.parentElement.remove();
+            return;
+        }
+    
+        alertElem.classList.remove("fade-in");
+        alertElem.classList.add("fade-out");
+        alertElem.addEventListener('animationend', () => {
+            alertElem.parentElement.remove();
+        });
+    }
+    
+    
 
     _hideAlert(alertElem) {
         setTimeout(() => {
             if (alertElem && alertElem.parentElement) {
-                alertElem.style.display = 'none';
-                alertElem.parentElement.remove();
+                this._fadeOutAndRemove(alertElem);
             }
         }, this.duration);
     }
@@ -118,6 +130,11 @@ class AlertNotification {
         }
 
         alertElem.style.display = 'block';
+
+        // Remove the fade-in class after 0.5 seconds
+        setTimeout(() => {
+            alertElem.classList.remove("fade-in");
+        }, 200);
 
         if (this.persistent) {
             this.father.classList.add("persistent");
@@ -138,8 +155,7 @@ class AlertNotification {
             console.warn("No non-persistent alerts found to hide.");
         }
         alerts.forEach(alert => {
-            alert.style.display = 'none';
-            alert.parentElement.remove();
+            this._fadeOutAndRemove(alert);
         });
     }
 
@@ -149,8 +165,7 @@ class AlertNotification {
             console.warn("No persistent alerts found to hide.");
         }
         persistentAlerts.forEach(alert => {
-            alert.style.display = 'none';
-            alert.parentElement.remove();
+            this._fadeOutAndRemove(alert);
         });
     }
 }
