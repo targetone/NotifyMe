@@ -32,7 +32,7 @@ Primeiro, inclua a biblioteca NotifyMe.js no seu projeto. Certifique-se de inclu
 </html>
 ```
 
-### Exemplo de Uso
+#### Exemplo de Uso
 
 Para exibir uma notificação, basta chamar uma das funções disponíveis, como `messageSuccess`, `messageError`, `messageWarning`, ou `messageInfo`. Veja um exemplo básico:
 
@@ -43,7 +43,7 @@ Para exibir uma notificação, basta chamar uma das funções disponíveis, como
 <button onclick="messageInfo('Informação importante a ser considerada.')">Informação</button>
 ```
 
-### Configurações e Parâmetros
+##### Configurações e Parâmetros
 
 As funções de notificação aceitam um objeto de configuração opcional para personalizar o comportamento da notificação. Aqui estão os parâmetros disponíveis:
 
@@ -59,7 +59,7 @@ Exemplo de uso com parâmetros personalizados:
 messageSuccess('Sucesso persistente!', { persistent: true, icon: 'thumbs-up' });
 ```
 
-### Ocultando Notificações Persistentes
+###### Ocultando Notificações Persistentes
 
 Você pode ocultar todas as notificações persistentes com a função `hidePersistent()`:
 
